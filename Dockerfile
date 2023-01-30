@@ -7,6 +7,8 @@ COPY ./requirements.txt /tmp/requirements.txt
 COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
+RUN pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
+RUN pip3 config set install.trusted-host mirrors.aliyun.com
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
