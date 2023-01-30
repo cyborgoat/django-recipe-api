@@ -4,15 +4,21 @@ LABEL maintainer="cyborgoat.com"
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
+
+ARG DEV=false
+
 RUN pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
 RUN pip3 config set install.trusted-host mirrors.aliyun.com
-
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
+    if [$DEV = "true"]; \
+        then /py/bin/pip install -r requirements.dev.txt; \
+    fi && \
     rm -rf /tmp && \
     adduser \
         --disabled-password \
