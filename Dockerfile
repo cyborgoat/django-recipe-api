@@ -11,12 +11,15 @@ EXPOSE 8000
 
 ARG DEV=false
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+RUN apk add --no-cache gcc musl-dev linux-headers
 RUN pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
 RUN pip3 config set install.trusted-host mirrors.aliyun.com
+
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client && \
-    apk add --update --no-cache --virtual .tmp-build-dev \
+    apk add --update --no-cache --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
