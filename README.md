@@ -1,2 +1,3 @@
-# g-island-api
-API for g-island
+# django-recipe-api
+
+Template for django api with docker
